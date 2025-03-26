@@ -18,17 +18,35 @@ void insert_at_head(struct linked_list *list, size_t value)
 
 void insert_at_tail(struct linked_list *list, size_t value) 
 {
-  
+  struct list_node * n = new_node(value);
+  struct list_node * p = list;
+
+  while(p -> next != NULL)
+  {
+    p -> next = n;
+  }
+
 }
 
 size_t remove_from_head(struct linked_list *list) 
 { 
-  return 0; 
+  struct list_node * n = list->head->next;
+  free(list);
+  return n;
+
 }
 
 size_t remove_from_tail(struct linked_list *list) 
 { 
-  return 0; 
+  struct list_node * n = list->head->next;
+  while (n != NULL)
+  {
+    n = n->next;
+  }
+  free(n);
+
+
+  
 }
 
 void free_list(struct linked_list list) 
