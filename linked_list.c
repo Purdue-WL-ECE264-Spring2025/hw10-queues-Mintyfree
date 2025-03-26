@@ -43,10 +43,8 @@ size_t remove_from_tail(struct linked_list *list)
   {
     n = n->next;
   }
-  free(n);
-
-
-  
+  free(list->head->next);
+  return n;
 }
 
 void free_list(struct linked_list list) 
