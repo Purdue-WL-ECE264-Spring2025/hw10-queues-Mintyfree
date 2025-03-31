@@ -14,5 +14,27 @@ struct game_state dequeue(struct queue *q)
 
 int number_of_moves(struct game_state start) 
 {
-    return 0; 
+    struct queue *q;
+    uint64_t newData = serialize(start);
+    q->data.head->next = new_node(newData);
+    enqueue(q, start);
+    struct game_state state = start;
+    int num = 1;
+
+    while (q->data.head->next != NULL)
+    {
+        state = dequeue(q);
+        if ((state.tiles[num]) == num)
+        {
+            num++;
+            continue;
+        }
+        else
+        {
+            for ()
+        }
+    }
+    
+    
+    return state.num_steps; 
 }
