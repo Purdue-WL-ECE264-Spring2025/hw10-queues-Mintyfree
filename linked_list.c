@@ -13,13 +13,13 @@ struct list_node *new_node(size_t value)
 void insert_at_head(struct linked_list *list, size_t value) 
 {
   struct list_node * n = new_node(value);
-  n -> next = list -> head;
+  n -> next = list->head;
 }
 
 void insert_at_tail(struct linked_list *list, size_t value) 
 {
   struct list_node * n = new_node(value);
-  struct list_node * p = list;
+  struct list_node * p = list->head;
 
   while(p -> next != NULL)
   {
@@ -31,20 +31,23 @@ void insert_at_tail(struct linked_list *list, size_t value)
 size_t remove_from_head(struct linked_list *list) 
 { 
   struct list_node * n = list->head->next;
+  list->head = n;
+  size_t retVal = list->head->value;
   free(list);
-  return n;
+  return retVal;
 
 }
 
 size_t remove_from_tail(struct linked_list *list) 
 { 
   struct list_node * n = list->head->next;
+  size_t retVal = list->head->value;
   while (n != NULL)
   {
     n = n->next;
   }
   free(list->head->next);
-  return n;
+  return retVal;
 }
 
 void free_list(struct linked_list list) 
