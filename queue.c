@@ -1,9 +1,36 @@
 #include "queue.h"
 #include "tile_game.h"
 
-void getChildren(struct queue *q, struct game_state state)
+void getChildren(struct queue *q, struct queue *visited, struct game_state state)
 {
+    struct game_state newState = state;
 
+    // Check if the node above has been searched, if not enqueue it
+    move_up(&newState);
+    serialize(newState);
+
+    if (!searchVisited(visited, newState)) {enqueue(q, newState);}
+    newState = state;
+
+    // Repeat for node below
+    move_down(&newState);
+    enqueue(visited, newState);
+
+    if (!searchVisited(visited, newState)) {enqueue(q, newState);}
+    newState = state;
+
+    // Repeat for node left
+    move_left(&newState);
+    enqueue(visited, newState);
+
+    if (!searchVisited(visited, newState)) {enqueue(q, newState);}
+    newState = state;
+
+    // Repeat for node right
+    move_right(&newState);
+    enqueue(visited, newState);
+    
+    if (!searchVisited(visited, newState)) {enqueue(q, newState);}
 }
 
 bool searchVisited(struct queue *q, struct game_state state)
@@ -40,12 +67,12 @@ int number_of_moves(struct game_state start)
 {
     // Initialization
     struct queue *q;
-    struct queue *visted;
+    struct queue *visited;
 
 
     uint64_t newData = serialize(start);
     insert_at_head(&q->data, newData);
-    insert_at_head(&visted->data, newData);
+    insert_at_head(&visited->data, newData);
     enqueue(q, start);
 
 
@@ -75,33 +102,11 @@ int number_of_moves(struct game_state start)
 
             // Grouping of trying to move to find the child nodes 
             // Reset and try to go the other directions
-            struct list_node searchNode;
-            uint64_t searchSerial;
 
-            move_up(&newState);
-            serialize(newState);
-            enqueue(visted, newState);
-            enqueue(q, newState);
-            newState = state;
-
-            move_down(&newState);
-            enqueue(visted, newState);
-            enqueue(q, newState);
-            newState = state;
-
-            move_left(&newState);
-            enqueue(visted, newState);
-            enqueue(q, newState);
-            newState = state;
-
-            move_right(&newState);
-            enqueue(visted, newState);
-            enqueue(q, newState);
-            newState = state;
         }
     }
     
     free_list(q->data);
-    free_list(visted->data);
+    free_list(visited->data);
     return state.num_steps; 
 }
