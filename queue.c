@@ -1,6 +1,20 @@
 #include "queue.h"
 #include "tile_game.h"
 
+bool searchVisited(struct queue *q, struct game_state state)
+{
+    uint64_t checkData = serialize(state);
+
+    struct list_node *delNode = q->data.head;
+    while(delNode != NULL)
+    {
+        if (delNode->value == checkData) {return true;}
+
+        delNode = delNode->next;
+    }
+    return false;
+}
+
 void getChildren(struct queue *q, struct queue *visited, struct game_state state)
 {
     struct game_state newState = state;
@@ -16,7 +30,7 @@ void getChildren(struct queue *q, struct queue *visited, struct game_state state
     move_down(&newState);
     enqueue(visited, newState);
 
-    if (!searchVisited(visited, newState)) {enqueue(q, newState);}
+    if (!(searchVisited(visited, newState))) {enqueue(q, newState);}
     newState = state;
 
     // Repeat for node left
@@ -29,22 +43,8 @@ void getChildren(struct queue *q, struct queue *visited, struct game_state state
     // Repeat for node right
     move_right(&newState);
     enqueue(visited, newState);
-    
+
     if (!searchVisited(visited, newState)) {enqueue(q, newState);}
-}
-
-bool searchVisited(struct queue *q, struct game_state state)
-{
-    uint64_t checkData = serialize(state);
-
-    struct list_node *delNode = q->data.head;
-    while(delNode != NULL)
-    {
-        if (delNode->value == checkData) {return true;}
-
-        delNode = delNode->next;
-    }
-    return false;
 }
 
 void enqueue(struct queue *q, struct game_state state) 
@@ -99,9 +99,8 @@ int number_of_moves(struct game_state start)
         else 
         {
             struct game_state newState = state;
-
-            // Grouping of trying to move to find the child nodes 
-            // Reset and try to go the other directions
+            // Call to put the children of the current state into the queue
+            getChildren(q, visited, newState);
 
         }
     }
