@@ -5,7 +5,7 @@
 struct list_node *new_node(size_t value) 
 { 
   struct list_node * n = malloc(sizeof(struct list_node));
-  n -> value;
+  n -> value = value;
   n -> next = NULL;
   return n;
 }

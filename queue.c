@@ -9,34 +9,70 @@ void enqueue(struct queue *q, struct game_state state)
 
 struct game_state dequeue(struct queue *q) 
 { 
-    struct game_state curr_state = deserialize(q);
+    struct game_state state = deserialize(q);
+    struct game_state curr_state = state;
 
-    return (struct game_state);
+
+
+    remove_from_head(q);
+    return (curr_state);
 }
 
 int number_of_moves(struct game_state start) 
 {
+    // Initialization
     struct queue *q;
+    struct queue *visted;
+
     uint64_t newData = serialize(start);
     q->data.head->next = new_node(newData);
+    visted->data.head->next = new_node(newData);
     enqueue(q, start);
+
+
     struct game_state state = start;
-    int rowCounter = 0;
-    int colCounter = 0;
-    int num = 1;
+    
+    // Create the final game state 
+    bool solved = false;   
 
     while (q->data.head->next != NULL)
     {
         state = dequeue(q);
-        if ((state.tiles[rowCounter][colCounter]) == num)
+
+        for (int i = 0; i < 16; i++)
         {
-            num++;
-            rowCounter++;
-            colCounter++;
-            continue;
+            if (state.tiles[i] != i + 1) {continue;}
+
+            else {solved = true;}
         }
-        else
+
+
+        if (solved == true) {break;}
+
+        else 
         {
+            struct game_state newUp = state;
+            struct game_state newDown = state;
+            struct game_state newLeft = state;
+            struct game_state newRight = state;
+
+            for (int i = 0; i < 4; i++)
+            {
+                move_up(&newUp);
+                move_down(&newDown);
+                move_right(&newLeft);
+                move_left(&newRight);
+
+                enqueue(visted, newUp);
+                enqueue(visted, newDown);
+                enqueue(visted, newLeft);
+                enqueue(visted, newRight);
+
+                enqueue(q, newUp);
+                enqueue(q, newDown);
+                enqueue(q, newLeft);
+                enqueue(q, newRight);
+            }
         }
     }
     
