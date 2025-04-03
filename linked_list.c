@@ -22,12 +22,12 @@ void insert_at_tail(struct linked_list *list, size_t value)
 {
   struct list_node * n = new_node(value);
   if(list->head == NULL) {list->head = n;}
-  n -> next = list->head->next;
+  n -> next = list->head;
   while(n -> next != NULL)
   {
     n = list->head->next;
   }
-  list->head->next = n;
+  n = list->head;
 
 }
 

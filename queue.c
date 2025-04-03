@@ -113,6 +113,8 @@ int number_of_moves(struct game_state start)
         }
     }
     
+    if (state.num_steps == 0) {return state.num_steps;}
+
     free_list(q.data);
     free_list(visited.data);
     return state.num_steps; 
