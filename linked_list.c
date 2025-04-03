@@ -25,6 +25,7 @@ void insert_at_tail(struct linked_list *list, size_t value)
   {
     p -> next = n;
   }
+  p->next = n;
 
 }
 

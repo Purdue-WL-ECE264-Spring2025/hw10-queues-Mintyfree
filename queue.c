@@ -20,8 +20,9 @@ struct game_state dequeue(struct queue *q)
 int number_of_moves(struct game_state start) 
 {
     // Initialization
-    struct queue *q = NULL;
-    struct queue *visted = NULL;
+    struct queue *q;
+    struct queue *visted;
+
 
     uint64_t newData = serialize(start);
     insert_at_head(&q->data, newData);
@@ -41,7 +42,7 @@ int number_of_moves(struct game_state start)
         int counter = 0; 
         for (int i = 0; i < 16; i++)
         {
-            if (*(*(state.tiles + i) + counter % 4) != i + 1) {continue;}
+            if (*(*(state.tiles + i) + counter % 4) != i + 1) {counter++; continue;}
 
             else {solved = true;}
         }
@@ -51,28 +52,28 @@ int number_of_moves(struct game_state start)
 
         else 
         {
-            struct game_state newUp = state;
-            struct game_state newDown = state;
-            struct game_state newLeft = state;
-            struct game_state newRight = state;
+            struct game_state newState = state;
 
-            for (int i = 0; i < 4; i++)
-            {
-                move_up(&newUp);
-                move_down(&newDown);
-                move_right(&newLeft);
-                move_left(&newRight);
+            // Grouping of trying to move to find the child nodes
+            move_up(&newState);
+            enqueue(visted, newState);
+            enqueue(q, newState);
+            newState = state;
 
-                enqueue(visted, newUp);
-                enqueue(visted, newDown);
-                enqueue(visted, newLeft);
-                enqueue(visted, newRight);
+            move_down(&newState);
+            enqueue(visted, newState);
+            enqueue(q, newState);
+            newState = state;
 
-                enqueue(q, newUp);
-                enqueue(q, newDown);
-                enqueue(q, newLeft);
-                enqueue(q, newRight);
-            }
+            move_left(&newState);
+            enqueue(visted, newState);
+            enqueue(q, newState);
+            newState = state;
+
+            move_right(&newState);
+            enqueue(visted, newState);
+            enqueue(q, newState);
+            newState = state;
         }
     }
     
