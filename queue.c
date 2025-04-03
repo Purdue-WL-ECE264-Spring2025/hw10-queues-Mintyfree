@@ -66,14 +66,14 @@ struct game_state dequeue(struct queue *q)
 int number_of_moves(struct game_state start) 
 {
     // Initialization
-    struct queue *q;
-    struct queue *visited;
+    struct queue q = {0};
+    struct queue visited = {0};
 
+    q.data.head = NULL;
+    visited.data.head = NULL;
 
-    uint64_t newData = serialize(start);
-    insert_at_head(&q->data, newData);
-    insert_at_head(&visited->data, newData);
-    enqueue(q, start);
+    enqueue(&q, start);
+    enqueue(&visited, start);
 
 
     struct game_state state = start;
@@ -81,9 +81,9 @@ int number_of_moves(struct game_state start)
     // Create the final game state 
     bool solved = false;   
 
-    while (q->data.head->next != NULL)
+    while (q.data.head->next != NULL)
     {
-        state = dequeue(q);
+        state = dequeue(&q);
 
         int counter = 0; 
         for (int i = 0; i < 16; i++)
@@ -100,12 +100,12 @@ int number_of_moves(struct game_state start)
         {
             struct game_state newState = state;
             // Call to put the children of the current state into the queue
-            getChildren(q, visited, newState);
+            getChildren(&q, &visited, newState);
 
         }
     }
     
-    free_list(q->data);
-    free_list(visited->data);
+    free_list(q.data);
+    free_list(visited.data);
     return state.num_steps; 
 }
