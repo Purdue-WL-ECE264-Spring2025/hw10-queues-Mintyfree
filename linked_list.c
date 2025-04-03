@@ -21,13 +21,13 @@ void insert_at_head(struct linked_list *list, size_t value)
 void insert_at_tail(struct linked_list *list, size_t value) 
 {
   struct list_node * n = new_node(value);
-  struct list_node * p = list->head;
-
-  while(p -> next != NULL)
+  if(list->head == NULL) {list->head = n;}
+  n -> next = list->head->next;
+  while(n -> next != NULL)
   {
-    p -> next = n;
+    n = list->head->next;
   }
-  p->next = n;
+  list->head->next = n;
 
 }
 
