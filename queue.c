@@ -127,6 +127,5 @@ int number_of_moves(struct game_state start)
 
     free_list(q.data);
     free_list(visited.data);
-    if (q.data.head == NULL) {printf("a;ljfierhagoh;ioajg;ifjaighriahgpuphg;oearjggriohgioihaeprgheag\n");}
     return state.num_steps; 
 }
