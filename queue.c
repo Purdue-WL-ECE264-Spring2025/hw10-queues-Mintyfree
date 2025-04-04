@@ -95,25 +95,22 @@ int number_of_moves(struct game_state start)
     struct game_state state = start;
     
     // Create the final game state 
-
+    int counter1 = 0;
+    int counter2 = 0;
+    int counter3 = 0;
     while (q.data.head != NULL)
     {
         state = dequeue(&q);
-        bool solved = true;   
-        for (int i = 0; i < 4; i++)
+        bool solved = true;
+        counter1 = 0;
+        counter2 = 0;
+        counter3 = 0;
+        while (counter3 < 15)
         {
-            for (int j = 0; j < 4; j++)
-            {
-                if (state.tiles[i][j] == (i * 4 + j + 1)) 
-                {
-                    continue;
-                }
-                else if (state.tiles[3][3] == 0)
-                {
-                    continue;
-                }
-                else {solved = false;}
-            }
+            if((state.tiles[counter1 / 4][counter2 % 4]) != counter3 + 1) {solved = false;}
+            counter1++;
+            counter2++;
+            counter3++;
         }
 
 
